@@ -1,88 +1,85 @@
 #include <stdio.h>
+int A[100000];
 
-long my_card[500000];
-long table_card[500000];
+int B[100000];
 
-void quickSort(long Array[], long array_size);
-void q_sort(long Array[], long left, long right);
+void quick_sort(int Array[], int size) {
+	q_sort(Array, 0, size -1);
+}
 
-void q_sort(long Array[], long left, long right) {
-	long pivot, l_hold, r_hold;
+void q_sort(int Array[], int left, int right) {
+	int l_hold, r_hold, pivot, temp;
+	
+	pivot = Array[(left+right)/2];
 	l_hold = left;
 	r_hold = right;
-	pivot = Array[left];
-	
-	while(left < right) {
-		while((Array[right] >= pivot) && (left < right))
-			right--;
-
-		if(left != right) {
-			Array[left] = Array[right];
-		}
+	do {
+		while(Array[l_hold] < pivot)
+			l_hold++;
 		
-		while((Array[left] <= pivot) && (left < right))
-			left++;
-		if(left != right) {
-			Array[right] = Array[left];
-			right--;
+		while(Array[r_hold] > pivot)
+			r_hold--;
+			
+		if(l_hold <= r_hold) {
+			temp = Array[l_hold];
+			Array[l_hold] = Array[r_hold];
+			Array[r_hold] = temp;
+			l_hold++;
+			r_hold--;
 		}
-	}
-	Array[left] = pivot;
-	pivot = left;
-	left = l_hold;
-	right = r_hold;
-	
-	if(left < pivot) {
-		q_sort(Array, left, pivot -1);
-	}
-	if(right > pivot) {
-		q_sort(Array, pivot + 1, right);
-	}
+	} while(l_hold < r_hold);
+		
+		if(left < r_hold) 
+			q_sort(Array, left, r_hold);
+		
+		if(l_hold < right)
+			q_sort(Array, l_hold, right);
 }
-
-void quickSort(long Array[], long array_size) {
-	q_sort(Array, 0, array_size-1);
-}
-
 int main(int argc, char* argv[]) {
 	
-	long i, num, num1, left, right;
-	scanf("%ld", &num);
+	int num, num1, i;
 	
-	for(i = 0; i< num; i++) { 
-		scanf("%ld", &my_card[i]);
+	scanf("%d", &num);
+	
+	for(i = 0; i < num; i++) {
+		scanf("%d", &A[i]);
 	}
 	
-	scanf("%ld", &num1);
+	scanf("%d", &num1);
 	
 	for(i = 0; i < num1; i++) {
-		scanf("%ld", &table_card[i]);
+		scanf("%d", &B[i]);
 	}
-	quickSort(my_card, num);
+	
+	quick_sort(A, num);
+	
+	
+	for(i = 0; i < num1; i++) {
+		
+		int j = binary_search(A, B[i]);
+		printf("%d\n", j);
+	}
+	return 0;
+}
 
-	for(i = 0; i < num1; i++) {
-		left = 0;
-		right = num -1;
-		while(left <= right) {
-			long mid = (left + right) /2;
-			if(my_card[mid] < table_card[i]) {
-				left = mid +1;
-			}
-			else if(my_card[mid] > table_card[i]) {
-				right = mid -1;
-			}
-			else {
-				table_card[i] = 1;
-				break;
-			}
+int binary_search(int A[], int num) {
+	int left, right;
+	left = 0;
+	right = num-1;
+	while(left <= right) {
+		int mid = (left + right) /2;
+		
+		if(A[mid] > num) {
+			right = mid -1;
 		}
-		if(left > right) {
-			table_card[i] = 0;
+		
+		else if(A[mid] < num) {
+			left = mid +1;
 		}
-	}
-	
-	for(i = 0; i< num1; i++) {
-		printf("%d ", table_card[i]);
+		
+		else {
+			return 1;
+		}
 	}
 	return 0;
 }
