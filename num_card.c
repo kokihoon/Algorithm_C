@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 	long i, num, num1, left, right;
 	scanf("%ld", &num);
 	
-	for(i = 0; i< num; i++) {
+	for(i = 0; i< num; i++) { 
 		scanf("%ld", &my_card[i]);
 	}
 	
